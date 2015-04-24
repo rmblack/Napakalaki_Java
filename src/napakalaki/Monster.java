@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package napakalaki;
 
-/**
- *
- * @author Usuario
- */
-public class Monster {
+package napakalaki;
+    
+        public class Monster {
     
     // Attributes
     private String name;
@@ -35,7 +27,7 @@ public class Monster {
     public Prize getPrize() {
         return prize;
     }
-    public BadConsequence getBadJuju() {
+    public BadConsequence getBadConsequence() {
         return badJuju;
     }
     
