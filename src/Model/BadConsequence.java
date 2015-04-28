@@ -1,43 +1,40 @@
 
-package napakalaki;
+package Model;
 
 import java.util.ArrayList;
         
 public class BadConsequence {
     
-    // Attributes
+    /* Attributes */
     private String text;
     private int levels;
-    private int nVisibleTreasures; // Theese do not count the 
-    private int nHiddenTreasures;  // ArrayLists with specifics.
+    private int nVisibleTreasures; // | Theese do not count the ArrayLists
+    private int nHiddenTreasures;  // | with specific treasures.
     private boolean death;
     private ArrayList<TreasureKind> specificVisibleTreasures;
     private ArrayList<TreasureKind> specificHiddenTreasures;
     
     
-    // Constructors
-    BadConsequence(String text, int levels, 
-                   int nVisible, int nHidden) {
+    /* Constructors */
+    public BadConsequence(String text, int levels, int nVisible, int nHidden) {
         this.text = text;
         this.levels = levels;
         this.nVisibleTreasures = nVisible;
         this.nHiddenTreasures = nHidden;
-        // defaults
         this.death = false;
         this.specificVisibleTreasures = new ArrayList();
         this.specificHiddenTreasures = new ArrayList();
     }
-    BadConsequence(String text, boolean death) {
+    public BadConsequence(String text, boolean death) {
         this.text = text;
-        this.death = true;
-        //defaults
+        this.death = death;
         this.levels = 0;
         this.nVisibleTreasures = 0;
         this.nHiddenTreasures = 0;
         this.specificVisibleTreasures = new ArrayList();
         this.specificHiddenTreasures = new ArrayList();
     }
-    BadConsequence(String text, int levels,
+    public BadConsequence(String text, int levels,
                    ArrayList<TreasureKind> tVisible,
                    ArrayList<TreasureKind> tHidden) {
         this.text = text;
@@ -47,10 +44,9 @@ public class BadConsequence {
         this.specificHiddenTreasures = tHidden;
         this.nVisibleTreasures = 0;
         this.nHiddenTreasures = 0;
-        //defaults
         death = false;
     }
-    BadConsequence(BadConsequence original) { // Copy constructor
+    public BadConsequence(BadConsequence original) { // Copy constructor
         this.death = original.death;
         this.levels = original.levels;
         this.nVisibleTreasures = original.nVisibleTreasures;
@@ -60,7 +56,7 @@ public class BadConsequence {
         this.specificVisibleTreasures = new ArrayList<TreasureKind>(original.specificVisibleTreasures);
     }
     
-   // Getters 
+   /* Getters */
     public String getText() {
         return text;
     }
@@ -76,29 +72,16 @@ public class BadConsequence {
     public boolean /*getDeath*/ kills() {
         return death;
     }
-    public java.util.ArrayList<TreasureKind> getSpecificVisibleTreasures() {
+    public ArrayList<TreasureKind> getSpecificVisibleTreasures() {
         return specificVisibleTreasures;
     }
-    public java.util.ArrayList<TreasureKind> getSpecificHiddenTreasures() {
+    public ArrayList<TreasureKind> getSpecificHiddenTreasures() {
         return specificHiddenTreasures;
     }
     
-    // Class methods
+    /* Public functions */
     
-    public boolean isEmpty() {
-        boolean output = false;
-        if (levels == 0 &
-            nVisibleTreasures <= 0 &  // puedes descartar mas tesoros de los necesarios 
-            nHiddenTreasures <= 0 &   // "
-            specificVisibleTreasures.isEmpty() &
-            specificHiddenTreasures.isEmpty() &
-            !death) {
-            output = true;
-        }
-        return output;
-    }
- 
-    protected void clone(BadConsequence original) {
+    public void clone(BadConsequence original) {
         this.death = original.death;
         this.levels = original.levels;
         this.nVisibleTreasures = original.nVisibleTreasures;
@@ -123,7 +106,20 @@ public class BadConsequence {
         }
         this.nHiddenTreasures--;
     }
-    
+
+    public boolean isEmpty() {
+        boolean output = false;
+        if (levels == 0 &
+            nVisibleTreasures <= 0 &  // Player may choose to discard more treasures than needed
+            nHiddenTreasures <= 0 &   // "
+            specificVisibleTreasures.isEmpty() &
+            specificHiddenTreasures.isEmpty() &
+            !death) {
+            output = true;
+        }
+        return output;
+    }
+ 
     public BadConsequence adjustToFitTreasureLists(ArrayList<Treasure> v, ArrayList<Treasure> h) {
         BadConsequence pendingBC;
         if ( this.nHiddenTreasures == 0 & this.nVisibleTreasures == 0) {
@@ -145,12 +141,15 @@ public class BadConsequence {
             for (TreasureKind type : this.specificHiddenTreasures) {
                 if (hKind.contains(type)) pendingHidden.add(type);
             }
-            /* REV: FAILS to discard TWO of kind :ONEHAND */
-                
+            /* Edit: "fails to discard two of kind :ONEHAND"
+             * Gamre rules do not mix both constructs
+             */    
             pendingBC = new BadConsequence("", 0, pendingVisible, pendingHidden);
         }
-        else { /* There's no specifics */
-            pendingBC = new BadConsequence("", 0, this.nVisibleTreasures, this.nHiddenTreasures);
+        else { /* There's no specifics, just use the maximum possible number */
+            int vNum = (this.nVisibleTreasures < v.size()) ? this.nVisibleTreasures : v.size();
+            int hNum = (this.nHiddenTreasures < h.size()) ? this.nHiddenTreasures : h.size();
+            pendingBC = new BadConsequence("", 0, vNum, hNum);
         }
         return pendingBC;
     }

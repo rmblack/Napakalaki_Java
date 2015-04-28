@@ -1,16 +1,16 @@
 
-package napakalaki;
+package Model;
 
 public class Treasure {
     
-    // Attributes
+    /* Attributes */
     private String name;
     private int goldCoins;
     private int minBonus;
     private int maxBonus;
     private TreasureKind type;
     
-    // Constructors
+    /* Constructors */
     Treasure(String name, int goldCoins, int minBonus,
              int maxBonus, TreasureKind type) {
         this.name = name;
@@ -20,7 +20,7 @@ public class Treasure {
         this.type = type;
     }
     
-    // Getters
+    /* Getters */
     String getName() {
         return name;
     }
@@ -37,4 +37,13 @@ public class Treasure {
         return type;
     }
     
+    /* Public functions */
+    
+    public String toString() {
+        String output = "\"" + name + "\" - " + type.toString() + " " + this.goldCoins + "g"; 
+        if (this.type != TreasureKind.NECKLACE) {
+            output += " " + this.minBonus + "/" + this.maxBonus + " bonus";
+        }
+        return output; 
+    }
 }

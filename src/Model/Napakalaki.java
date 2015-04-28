@@ -1,34 +1,31 @@
 
-package napakalaki;
+package Model;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Class Napakalaki
- * currentPlayerIndex initializes to -1 to indicate that the game has not
- * started yet
- *  REV: WRONG TURN START, REDO.
- */
 public class Napakalaki {
     
-    // Attributes
+    /* Attributes */
     private static Napakalaki instance = null;
     private ArrayList<Player> players;
     private int currentPlayerIndex;
     private Player currentPlayer;
     private Monster currentMonster;
     
-    // Private Constructor - Singleton build
+    /* Private Constructor - Singleton build */
     private Napakalaki() {
-        currentPlayerIndex = -1;
+        currentPlayerIndex = -1; // Indicates game is unstarted
         players = new ArrayList();
         currentPlayer = new Player("null_player");
     }
     
-    // Private functions
+    /* Private functions */
+    
     private void initPlayers(ArrayList<String> names) {
-        for (String name : names) players.add(new Player(name));
+        for (String name : names) {
+            players.add(new Player(name));
+        }
     }
     
     public Player nextPlayer() {
@@ -42,9 +39,12 @@ public class Napakalaki {
         return currentPlayer;
     }
     
-    // Public Functions
-    public CombatResult combat() {
-        return currentPlayer.combat(currentMonster);
+    /* Public functions */
+    
+    public void initGame(ArrayList<String> players) {
+        CardDealer.getInstance().initCards();
+        initPlayers(players);
+        nextTurn();
     }
     
     public void discardVisibleTreasure(Treasure t) {
@@ -56,41 +56,15 @@ public class Napakalaki {
     }
     
     public boolean makeTreasureVisible(Treasure t) {
-        boolean condition;
-        condition = currentPlayer.makeTreasureVisible(t);
-        return condition;
+        return currentPlayer.makeTreasureVisible(t);
     }
     
     public boolean buyLevels (ArrayList<Treasure> visible, ArrayList<Treasure> hidden) {
-        boolean condition;
-        condition = currentPlayer.buyLevels(visible, hidden);
-        return condition;
+        return currentPlayer.buyLevels(visible, hidden);
     }
-    
-    public void initGame(ArrayList<String> players) {
-        CardDealer.getInstance().initCards();
-        initPlayers(players);
-        nextTurn();
-    }
-    
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-    
-    public Monster getCurrentMonster() {
-        return currentMonster;
-    }
-    
+
     public boolean canMakeTreasureVisible(Treasure t) {
         return currentPlayer.canMakeTreasureVisible(t);
-    }
-    
-    public ArrayList<Treasure> getVisibleTreasures() {
-        return currentPlayer.getVisibleTreasures();
-    }
-    
-    public ArrayList<Treasure> getHiddenTreasures() {
-        return currentPlayer.getHiddenTreasures();
     }
     
     public boolean nextTurn() {
@@ -107,7 +81,9 @@ public class Napakalaki {
     }
     
     public boolean nextTurnAllowed() {
-        return currentPlayer.validState();
+        boolean condition = true;
+        if ( currentPlayer != null ) condition = currentPlayer.validState(); // Debug_1 - When first executed, player is still null
+        return condition;
     }
     
     public boolean endOfGame(CombatResult result) {
@@ -115,12 +91,29 @@ public class Napakalaki {
         if (result == CombatResult.WINANDWINGAME) state = true;
         return state;
     }
+
+    public CombatResult combat() {
+        return currentPlayer.combat(currentMonster);
+    }
     
-    // Attribute Getters
+    /* Getters */
     public static Napakalaki getInstance() {
         if (instance == null) {
             instance = new Napakalaki();
         }
         return instance;
     }
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+    public Monster getCurrentMonster() {
+        return currentMonster;
+    }
+    public ArrayList<Treasure> getVisibleTreasures() {
+        return currentPlayer.getVisibleTreasures();
+    }  
+    public ArrayList<Treasure> getHiddenTreasures() {
+        return currentPlayer.getHiddenTreasures();
+    }
+    
 }

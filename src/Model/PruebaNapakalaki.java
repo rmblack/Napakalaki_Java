@@ -1,6 +1,6 @@
 /* File is obsolete, many code has ben moved to class methods
  */
-package napakalaki;
+package Model;
 
 import java.util.Arrays;
 import java.util.ArrayList;

@@ -1,15 +1,15 @@
 
-package napakalaki;
+package Model;
     
-        public class Monster {
+public class Monster {
     
-    // Attributes
+    /* Attributes */
     private String name;
     private int combatLevel;
     Prize prize;
     BadConsequence badJuju; 
     
-    // Constructors
+    /* Constructors */
     Monster (String name, int combatLevel, Prize prize, BadConsequence badJuju) {
         this.name = name;
         this.combatLevel = combatLevel;
@@ -17,7 +17,7 @@ package napakalaki;
         this.badJuju = badJuju;        
     }
     
-    // Getters
+    /* Getters */
     public String getName() {
         return name;
     }
@@ -31,9 +31,9 @@ package napakalaki;
         return badJuju;
     }
     
-    // Class methods
+    /* Class methods */
     public String toString() {
-        return "Name = \"" + name + "\" Combat Level = " + Integer.toString(combatLevel) +
-               "; Prize: " + prize.toString() + " ; Bad Juju: " + badJuju.toString();
+        return "Name = \"" + this.name + "\"\nCombat Level = " + Integer.toString(this.combatLevel) +
+               "\nPrize: " + this.prize.toString() + "\nBad Juju: " + this.badJuju.toString();
     }
 }

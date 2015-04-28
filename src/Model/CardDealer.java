@@ -1,5 +1,5 @@
 
-package napakalaki;
+package Model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,23 +7,24 @@ import java.util.Collections;
 
 public class CardDealer {
     
-    // Attributes
+    /* Attributes */
+    private static final boolean CHEATMODE = true; /* Used to Debug. Do not include in final release*/ 
+    private static final int NUM_MONSTRUOS = 19; // Just to keep track in case we add new ones
     private static CardDealer instance = null;
     private ArrayList<Monster> unusedMonsters;
     private ArrayList<Monster> usedMonsters;
     private ArrayList<Treasure> unusedTreasures;
     private ArrayList<Treasure> usedTreasures;
-    private static final int NUM_MONSTRUOS = 19; // ADDED
-    
-    // Private Constructor - Singleton build
+  
+    /* Private Constructor - Singleton build */
     private CardDealer() {
-    unusedMonsters = new ArrayList<Monster>();
-    usedMonsters = new ArrayList<Monster>();
-    unusedTreasures = new ArrayList<Treasure>();
-    usedTreasures = new ArrayList<Treasure>();
+        unusedMonsters = new ArrayList<Monster>();
+        usedMonsters = new ArrayList<Monster>();
+        unusedTreasures = new ArrayList<Treasure>();
+        usedTreasures = new ArrayList<Treasure>();
     }
 
-    // Private functions
+    /* Private functions */
     
     private void initMonsterCardDeck() {
         /*  Asociamos a cada monstruo un número entero para identificar sus atributos
@@ -31,7 +32,6 @@ public class CardDealer {
          *  Nota: no todos tienen los mismos atributos
          */
 
-        // Monster name text
         String text_name_1 = "Byakhees de bonanza";
         String text_name_2 = "Chibithulhu";
         String text_name_3 = "El sopor de Dunwich";
@@ -52,7 +52,6 @@ public class CardDealer {
         String text_name_18 = "El Lenguas";
         String text_name_19 = "Bicéfalo";
 
-        // Bad Juju text
         String text_badjuju_1 = "Pierdes tu armadura visible y otra oculta.";
         String text_badjuju_2 = "Embobados con el lindo primigenio te descartas de tu casco visible.";
         String text_badjuju_3 = "El primordial bostezo contagioso. Pierdes el calzaco visible.";
@@ -73,7 +72,6 @@ public class CardDealer {
         String text_badjuju_18 = "Menudo susto te llevas. Pierdes 2 niveles y 5 tesoros visibles.";
         String text_badjuju_19 = "Te faltan manos para tanta cabeza. Pierdes 3 niveles y tus tesoros visibles de las manos.";
 
-        // Prize
         Prize prize_1 = new Prize (2, 1);
         Prize prize_2 = new Prize (1, 1);
         Prize prize_3 = new Prize (1, 1);
@@ -92,10 +90,9 @@ public class CardDealer {
         Prize prize_16 = new Prize (2, 1);
         Prize prize_17 = new Prize (1, 1);
         Prize prize_18 = new Prize (1, 1);
-        //
         Prize prize_19 = new Prize (1, 1);
 
-        // ArrayList para tesoros visibles y ocultos
+        // ArrayList for visible·hidden treasures
         ArrayList<TreasureKind> list_v_1 = new ArrayList(Arrays.asList(TreasureKind.ARMOR));
         ArrayList<TreasureKind> list_h_1 = new ArrayList(Arrays.asList(TreasureKind.ARMOR));
         ArrayList<TreasureKind> list_v_2 = new ArrayList(Arrays.asList(TreasureKind.HELMET));
@@ -164,6 +161,8 @@ public class CardDealer {
         Monster monstruo_18 = new Monster(text_name_18, 20, prize_18, bc_18);
         Monster monstruo_19 = new Monster(text_name_19, 20, prize_19, bc_19);
 
+        if (!CHEATMODE)
+        {
         unusedMonsters.add(monstruo_1);
         unusedMonsters.add(monstruo_2);
         unusedMonsters.add(monstruo_3);
@@ -183,7 +182,13 @@ public class CardDealer {
         unusedMonsters.add(monstruo_17);
         unusedMonsters.add(monstruo_18);
         unusedMonsters.add(monstruo_19);
-
+        }
+        else /* Order will not be altered by initGame()*/
+        {
+        unusedMonsters.add(monstruo_1);
+        unusedMonsters.add(monstruo_2);
+        unusedMonsters.add(monstruo_3);
+        }
     }
     
     private void initTreasureCardDeck() {
@@ -254,6 +259,8 @@ public class CardDealer {
         Treasure treasure_31 = new Treasure(text_treasure_31, 600, 1, 1, TreasureKind.BOTHHANDS); 
         Treasure treasure_32 = new Treasure(text_treasure_32, 400, 3, 4, TreasureKind.ONEHAND);        
         
+        if (!CHEATMODE)
+        {
         unusedTreasures.add(treasure_1);
         unusedTreasures.add(treasure_2);
         unusedTreasures.add(treasure_3);
@@ -286,7 +293,20 @@ public class CardDealer {
         unusedTreasures.add(treasure_30);
         unusedTreasures.add(treasure_31);
         unusedTreasures.add(treasure_32);
-    
+        }
+        else /* Order will not be altered by initGame()*/
+        {
+        unusedTreasures.add(treasure_9);
+        unusedTreasures.add(treasure_10);
+        unusedTreasures.add(treasure_12);
+        unusedTreasures.add(treasure_15);
+        unusedTreasures.add(treasure_26);
+        unusedTreasures.add(treasure_28);
+        unusedTreasures.add(treasure_32);
+        unusedTreasures.add(treasure_17);
+        unusedTreasures.add(treasure_20);
+        unusedTreasures.add(treasure_21);
+        }
     }
     
     private void shuffleTreasures() {
@@ -297,7 +317,8 @@ public class CardDealer {
         Collections.shuffle(unusedMonsters);
     }
     
-    // Public functions
+    /* Public functions */
+    
     public Treasure nextTreasure() {
         int lastTreasureIndex = unusedTreasures.size()-1;
         Treasure next = unusedTreasures.get(lastTreasureIndex);
@@ -311,7 +332,7 @@ public class CardDealer {
         return next;
     }
     
-    public Monster nextMonster() { // REV: DOES NOT TAKE next to usedMonsters
+    public Monster nextMonster() {
         int lastMonsterIndex = unusedMonsters.size()-1;
         Monster next = unusedMonsters.get(lastMonsterIndex);
         unusedMonsters.remove(lastMonsterIndex);
@@ -325,21 +346,27 @@ public class CardDealer {
         
     }
     
-    public void giveTreasureBack(Treasure t) { // NOT ENTRY SAFE
+    public void giveTreasureBack(Treasure t) { // NOT ENTRY-SAFE
         usedTreasures.add(t);
         unusedTreasures.remove(t);
     }
-    public void giveMonsterBack (Monster m) { // NOT ENTRY SAFE
+    
+    public void giveMonsterBack (Monster m) { // NOT ENTRY-SAFE
         usedMonsters.add(m);
         unusedMonsters.remove(m);
     }
+    
     public void initCards() {
         initMonsterCardDeck();
         initTreasureCardDeck();
+        if (!CHEATMODE)
+        {
+        this.shuffleMonsters();
+        this.shuffleTreasures();
+        }
     }
     
-    // Singleton build
-            
+    /* Singleton build */        
     public static CardDealer getInstance() {
         if (instance == null) {
             instance = new CardDealer();

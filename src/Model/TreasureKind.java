@@ -1,5 +1,5 @@
 
-package napakalaki;
+package Model;
 
 public enum TreasureKind {
     ARMOR, ONEHAND, BOTHHANDS, 

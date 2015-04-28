@@ -1,35 +1,35 @@
 
-package napakalaki;
+package Model;
 
 public class Prize {
     
-    // Attributes
+    /* Attributes */
     private int treasures;
     private int levels;
     
-    // Constructors
+    /* Constructors */
     Prize (int treasures, int levels){
         this.levels = levels;
         this.treasures = treasures;
     }
     
-    // Getters
-    int getTreasures() {
+    /* Getters */
+    public int getTreasures() {
         return treasures;
     }
-    int getLevels() {
+    public int getLevels() {
         return levels;
     }
     
-    // Setters
-    void setTreasures(int treasures){
+    /* Setters */
+    public void setTreasures(int treasures){
         this.treasures = treasures;
     }
-    void setLevels (int levels){
+    public void setLevels (int levels){
         this.levels = levels;
     }
     
-    // Class methods
+    /* Functions */
     public String toString() {
         return "Treasures = " + Integer.toString(treasures) +
                " Levels = " + Integer.toString(levels);
